@@ -41,6 +41,11 @@ public class Health : MonoBehaviour
     {
         Debug.Log(gameObject.name + " died!");
 
+        if (CompareTag("Enemy"))
+        {
+            GameManager.Instance.EnemyDefeated();
+        }
+
         Destroy(gameObject);
     }
 }
