@@ -1,21 +1,35 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 3;
+    [SerializeField] private Slider healthBar;
 
     private int currentHealth;
 
     private void Awake()
     {
         currentHealth = maxHealth;
+
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
+        }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
 
-        Debug.Log(gameObject.name + " received " + damage + " damage. Health: " + currentHealth);
+        if (healthBar != null)
+        {
+            healthBar.value = currentHealth;
+        }
+
+        Debug.Log(gameObject.name + " received " + damage +
+                  " damage. Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
