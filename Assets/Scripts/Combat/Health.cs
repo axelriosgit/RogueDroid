@@ -44,6 +44,13 @@ public class Health : MonoBehaviour
         if (CompareTag("Enemy"))
         {
             GameManager.Instance.EnemyDefeated();
+
+            EnemySpawner spawner = FindFirstObjectByType<EnemySpawner>();
+
+            if (spawner != null)
+            {
+                spawner.EnemyDefeated();
+            }
         }
 
         Destroy(gameObject);
