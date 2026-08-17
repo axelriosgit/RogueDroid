@@ -1,31 +1,40 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 3;
-    [SerializeField] private Slider healthBar;
+    [SerializeField] private EnemyHealthBar healthBarPrefab;
+    [SerializeField] private Transform healthBarAnchor;
 
     private int currentHealth;
+    private EnemyHealthBar healthBar;
 
     private void Awake()
     {
         currentHealth = maxHealth;
 
-        if (healthBar != null)
+        if (CompareTag("Enemy") && healthBarPrefab != null && healthBarAnchor != null)
         {
-            healthBar.maxValue = maxHealth;
-            healthBar.value = currentHealth;
+            healthBar = Instantiate(
+                healthBarPrefab,
+                healthBarAnchor.position,
+                Quaternion.identity,
+                healthBarAnchor
+            );
+
+            healthBar.transform.localPosition = Vector3.zero;
+            healthBar.SetMaxHealth(maxHealth);
         }
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0);
 
         if (healthBar != null)
         {
-            healthBar.value = currentHealth;
+            healthBar.SetHealth(currentHealth);
         }
 
         Debug.Log(gameObject.name + " received " + damage +
@@ -51,8 +60,12 @@ public class Health : MonoBehaviour
             {
                 spawner.EnemyDefeated();
             }
-        }
 
-        Destroy(gameObject);
+            Destroy(gameObject);
+        }
+        else if (CompareTag("Player"))
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 }

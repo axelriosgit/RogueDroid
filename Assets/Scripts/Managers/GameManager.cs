@@ -1,11 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private TMP_Text killCounterText;
+    [SerializeField] private GameObject gameOverPanel;
 
     private int enemiesDefeated;
 
@@ -29,6 +32,23 @@ public class GameManager : MonoBehaviour
     {
         enemiesDefeated++;
         UpdateKillCounter();
+    }
+    public void GameOver()
+    {
+        Debug.Log("GAME OVER");
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void UpdateKillCounter()
