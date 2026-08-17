@@ -3,8 +3,10 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 3;
+    [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private EnemyHealthBar healthBarPrefab;
     [SerializeField] private Transform healthBarAnchor;
+
 
     private int currentHealth;
     private EnemyHealthBar healthBar;
@@ -39,6 +41,16 @@ public class Health : MonoBehaviour
 
         Debug.Log(gameObject.name + " received " + damage +
                   " damage. Health: " + currentHealth);
+
+        if (CompareTag("Enemy"))
+        {
+            EnemyController enemyController = GetComponent<EnemyController>();
+
+            if (enemyController != null)
+            {
+                enemyController.ApplyKnockback(knockbackForce);
+            }
+        }
 
         if (currentHealth <= 0)
         {
