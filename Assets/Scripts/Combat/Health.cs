@@ -75,7 +75,7 @@ public class Health : MonoBehaviour
         {
             GameManager.Instance.EnemyDefeated();
 
-            EnemySpawner spawner = FindFirstObjectByType<EnemySpawner>();
+            EnemySpawner spawner = FindAnyObjectByType<EnemySpawner>();
 
             if (spawner != null)
             {
