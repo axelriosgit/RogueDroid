@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private EnemyHealthBar healthBarPrefab;
     [SerializeField] private Transform healthBarAnchor;
+    [SerializeField] private PlayerHealthBar playerHealthBar;
 
 
     private int currentHealth;
@@ -14,6 +15,10 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        if (CompareTag("Player") && playerHealthBar != null)
+        {
+            playerHealthBar.SetMaxHealth(maxHealth);
+        }
 
         if (CompareTag("Enemy") && healthBarPrefab != null && healthBarAnchor != null)
         {
@@ -37,6 +42,10 @@ public class Health : MonoBehaviour
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth);
+        }
+        if (CompareTag("Player") && playerHealthBar != null)
+        {
+            playerHealthBar.SetHealth(currentHealth);
         }
 
         Debug.Log(gameObject.name + " received " + damage +

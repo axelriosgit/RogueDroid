@@ -11,9 +11,15 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private float waveDelay = 3f;
 
+    [Header("Difficulty")]
+    [SerializeField] private int additionalEnemiesPerWave = 1;
+    [SerializeField] private float spawnDelayDecrease = 0.1f;
+    [SerializeField] private float minimumSpawnDelay = 0.4f;
+
     private int currentWave = 0;
     private int enemiesSpawned;
     private int enemiesAlive;
+    private int enemiesThisWave;
 
     private void Start()
     {
@@ -25,20 +31,41 @@ public class EnemySpawner : MonoBehaviour
         currentWave++;
         enemiesSpawned = 0;
 
-        Debug.Log("Wave " + currentWave + " started!");
+        enemiesThisWave =
+            enemiesPerWave +
+            (currentWave - 1) * additionalEnemiesPerWave;
 
-        InvokeRepeating(nameof(SpawnEnemy), 0f, spawnDelay);
+        float currentSpawnDelay =
+            Mathf.Max(
+                minimumSpawnDelay,
+                spawnDelay - (currentWave - 1) * spawnDelayDecrease
+            );
+
+        Debug.Log(
+            "Wave " + currentWave +
+            " started! Enemies: " + enemiesThisWave
+        );
+
+        InvokeRepeating(
+            nameof(SpawnEnemy),
+            0f,
+            currentSpawnDelay
+        );
     }
 
     private void SpawnEnemy()
     {
-        if (enemiesSpawned >= enemiesPerWave)
+        if (enemiesSpawned >= enemiesThisWave)
         {
             CancelInvoke(nameof(SpawnEnemy));
             return;
         }
 
-        Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
+        Instantiate(
+            enemyPrefab,
+            spawnPoint.position,
+            Quaternion.identity
+        );
 
         enemiesSpawned++;
         enemiesAlive++;
@@ -49,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
         enemiesAlive--;
 
         if (enemiesAlive <= 0 &&
-            enemiesSpawned >= enemiesPerWave)
+            enemiesSpawned >= enemiesThisWave)
         {
             Invoke(nameof(StartNextWave), waveDelay);
         }
