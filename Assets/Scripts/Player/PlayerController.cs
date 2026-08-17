@@ -15,6 +15,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private float horizontalInput;
     private bool isGrounded;
+    public bool IsGrounded => isGrounded;
+    
+
+
+    private int facingDirection = 1;
+
+    public int FacingDirection => facingDirection;
 
     private void Awake()
     {
@@ -48,11 +55,13 @@ public class PlayerController : MonoBehaviour
             Keyboard.current.leftArrowKey.isPressed)
         {
             horizontalInput = -1f;
+            facingDirection = -1;
         }
         else if (Keyboard.current.dKey.isPressed ||
                  Keyboard.current.rightArrowKey.isPressed)
         {
             horizontalInput = 1f;
+            facingDirection = 1;
         }
     }
 
