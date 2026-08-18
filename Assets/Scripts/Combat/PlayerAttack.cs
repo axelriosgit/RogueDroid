@@ -11,7 +11,6 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Air Attack")]
     [SerializeField] private float airAttackHeight = 0.5f;
-    [SerializeField] private float downwardAttackDistance = 1.2f;
 
     private float lastAttackTime;
     private PlayerController playerController;

@@ -3,11 +3,9 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 2f;
-    [SerializeField] private float knockbackDuration = 0.15f;
 
     private Transform player;
     private Rigidbody2D rb;
-    private float knockbackTimer;
 
     private void Awake()
     {
@@ -26,12 +24,6 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (knockbackTimer > 0f)
-        {
-            knockbackTimer -= Time.fixedDeltaTime;
-            return;
-        }
-
         if (player == null)
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
@@ -46,24 +38,44 @@ public class EnemyController : MonoBehaviour
             direction * moveSpeed,
             rb.linearVelocity.y
         );
+
+        UpdateFacing(direction);
+    }
+
+    private void UpdateFacing(float direction)
+    {
+        if (direction > 0f)
+        {
+            transform.localScale = new Vector3(
+                1f,
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
+        else if (direction < 0f)
+        {
+            transform.localScale = new Vector3(
+                -1f,
+                transform.localScale.y,
+                transform.localScale.z
+            );
+        }
     }
 
     public void ApplyKnockback(float force)
     {
-        if (player == null)
+        if (rb == null || player == null)
+        {
             return;
+        }
 
         float direction = Mathf.Sign(
             transform.position.x - player.position.x
         );
 
-        rb.linearVelocity = Vector2.zero;
-
-        rb.AddForce(
-            new Vector2(direction * force, 2f),
-            ForceMode2D.Impulse
+        rb.linearVelocity = new Vector2(
+            direction * force,
+            rb.linearVelocity.y
         );
-
-        knockbackTimer = knockbackDuration;
     }
 }
