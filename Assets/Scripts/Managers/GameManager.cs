@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TMP_Text killCounterText;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TMP_Text finalScoreText;
 
     private int enemiesDefeated;
 
@@ -36,6 +37,11 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GAME OVER");
+
+        if (finalScoreText != null)
+        {
+            finalScoreText.text = "ENEMIES DEFEATED: " + enemiesDefeated;
+        }
 
         if (gameOverPanel != null)
         {
