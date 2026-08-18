@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
+    [Header("Attack")]
     [SerializeField] private int damage = 1;
     [SerializeField] private float attackCooldown = 1f;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private float attackDuration = 0.15f;
+
+    [Header("Player Protection")]
+    [SerializeField] private float playerInvulnerabilityTime = 0.4f;
 
     private Transform player;
     private float lastAttackTime;
@@ -40,7 +44,9 @@ public class EnemyAttack : MonoBehaviour
     private void Update()
     {
         if (player == null)
+        {
             return;
+        }
 
         float distance = Mathf.Abs(
             player.position.x - transform.position.x
@@ -57,14 +63,16 @@ public class EnemyAttack : MonoBehaviour
     {
         lastAttackTime = Time.time;
 
+        StartCoroutine(ShowAttack());
+
         Health playerHealth = player.GetComponent<Health>();
 
-        if (playerHealth != null)
+        if (playerHealth != null &&
+            playerHealth.CanTakeDamage)
         {
             playerHealth.TakeDamage(damage);
+            playerHealth.StartInvulnerability(playerInvulnerabilityTime);
         }
-
-        StartCoroutine(ShowAttack());
     }
 
     private IEnumerator ShowAttack()

@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float moveSpeed = 2f;
+
+    [Header("Knockback")]
+    [SerializeField] private float knockbackDuration = 0.15f;
 
     private Transform player;
     private Rigidbody2D rb;
+    private float knockbackTimer;
 
     private void Awake()
     {
@@ -30,6 +35,13 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        if (knockbackTimer > 0f)
+        {
+            knockbackTimer -= Time.fixedDeltaTime;
+            UpdateFacing(Mathf.Sign(rb.linearVelocity.x));
+            return;
+        }
+
         float direction = Mathf.Sign(
             player.position.x - transform.position.x
         );
@@ -47,7 +59,7 @@ public class EnemyController : MonoBehaviour
         if (direction > 0f)
         {
             transform.localScale = new Vector3(
-                1f,
+                Mathf.Abs(transform.localScale.x),
                 transform.localScale.y,
                 transform.localScale.z
             );
@@ -55,7 +67,7 @@ public class EnemyController : MonoBehaviour
         else if (direction < 0f)
         {
             transform.localScale = new Vector3(
-                -1f,
+                -Mathf.Abs(transform.localScale.x),
                 transform.localScale.y,
                 transform.localScale.z
             );
@@ -75,7 +87,9 @@ public class EnemyController : MonoBehaviour
 
         rb.linearVelocity = new Vector2(
             direction * force,
-            rb.linearVelocity.y
+            0f
         );
+
+        knockbackTimer = knockbackDuration;
     }
 }

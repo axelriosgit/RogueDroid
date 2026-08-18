@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -9,8 +10,12 @@ public class Health : MonoBehaviour
     [SerializeField] private PlayerHealthBar playerHealthBar;
 
 
+
     private int currentHealth;
     private EnemyHealthBar healthBar;
+    private bool isInvulnerable;
+
+    public bool CanTakeDamage => !isInvulnerable;
 
     private void Awake()
     {
@@ -88,5 +93,18 @@ public class Health : MonoBehaviour
         {
             GameManager.Instance.GameOver();
         }
+    }
+    public void StartInvulnerability(float duration)
+    {
+        StartCoroutine(InvulnerabilityRoutine(duration));
+    }
+
+    private IEnumerator InvulnerabilityRoutine(float duration)
+    {
+        isInvulnerable = true;
+
+        yield return new WaitForSeconds(duration);
+
+        isInvulnerable = false;
     }
 }

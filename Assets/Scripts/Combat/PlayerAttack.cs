@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private GameObject attackHitbox;
     [SerializeField] private float attackDuration = 0.15f;
-    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float attackCooldown = 0.3f;
 
     [Header("Air Attack")]
     [SerializeField] private float airAttackHeight = 0.5f;
