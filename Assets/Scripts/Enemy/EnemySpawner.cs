@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -5,6 +6,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("Enemy")]
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private TMP_Text waveCounterText;
 
     [Header("Waves")]
     [SerializeField] private int enemiesPerWave = 3;
@@ -30,6 +32,11 @@ public class EnemySpawner : MonoBehaviour
     {
         currentWave++;
         enemiesSpawned = 0;
+
+        if (waveCounterText != null)
+        {
+            waveCounterText.text = "WAVE: " + currentWave;
+        }
 
         enemiesThisWave =
             enemiesPerWave +
